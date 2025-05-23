@@ -7,8 +7,8 @@
   <style>
     body {
       margin: 0;
-      font-family: 'Inter', system-ui, sans-serif;
-      background-color: #f8f9fa;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background-color: #fafafa;
       color: #222;
       line-height: 1.7;
     }
@@ -25,15 +25,52 @@
     }
 
     .header h1 {
-      font-size: 2rem;
+      font-size: 2.2rem;
       font-weight: 600;
       color: #111;
+      margin-bottom: 10px;
     }
 
     .header p {
       font-size: 1rem;
       color: #555;
-      margin-top: 10px;
+    }
+
+    .links-section {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-top: 25px;
+    }
+
+    .link-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #222;
+      color: #fff;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      transition: background 0.2s ease;
+    }
+
+    .link-button:hover {
+      background: #444;
+    }
+
+    .link-button.github {
+      background: #24292e;
+    }
+
+    .link-button.huggingface {
+      background: #ff9900;
+    }
+
+    .link-button.arxiv {
+      background: #b91c1c;
     }
 
     .section {
@@ -51,6 +88,7 @@
       margin-bottom: 20px;
       border-bottom: 1px solid #ddd;
       padding-bottom: 10px;
+      color: #111;
     }
 
     .abstract {
@@ -100,6 +138,18 @@
     <header class="header">
       <h1>Finding Needles in Images: Can Multi-modal LLMs Locate Fine Details?</h1>
       <p>A professional benchmark for fine-grained visual document understanding</p>
+
+      <div class="links-section">
+        <a href="https://github.com/your-username/needles-in-images" class="link-button github">
+          <span>📄</span> GitHub
+        </a>
+        <a href="https://huggingface.co/datasets/your-username/needles-dataset" class="link-button huggingface">
+          <span>🤗</span> Hugging Face
+        </a>
+        <a href="https://arxiv.org/abs/your-paper-id" class="link-button arxiv">
+          <span>📚</span> arXiv
+        </a>
+      </div>
     </header>
 
     <section class="section">
