@@ -115,80 +115,23 @@
             margin-bottom: 30px;
         }
 
-        .examples-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 30px;
-        }
-
-        .example-card {
-            background: #f8f9fa;
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease;
-        }
-
-        .example-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .example-image {
-            width: 100%;
-            height: 200px;
-            background: linear-gradient(45deg, #e9ecef, #dee2e6);
-            border-radius: 10px;
+        .zoom-view {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #6c757d;
-            font-weight: 600;
-            margin-bottom: 15px;
-            border: 2px dashed #ced4da;
-        }
-
-        .example-description {
-            font-size: 0.95rem;
-            color: #666;
-            line-height: 1.5;
-        }
-
-        .methodology {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            margin-bottom: 30px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-        }
-
-        .methodology-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            flex-wrap: wrap;
             gap: 20px;
-            margin-top: 20px;
-        }
-
-        .methodology-card {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .methodology-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
             justify-content: center;
-            margin: 0 auto 15px;
-            color: white;
-            font-size: 1.5rem;
-            font-weight: bold;
+            align-items: center;
+        }
+
+        .zoom-view img {
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            max-width: 100%;
+        }
+
+        .zoom-view .zoomed {
+            clip-path: inset(30% 30% 30% 30%);
+            max-width: 250px;
         }
 
         .footer {
@@ -202,19 +145,15 @@
             .title {
                 font-size: 2rem;
             }
-            
+
             .links-section {
                 flex-direction: column;
                 align-items: center;
             }
-            
+
             .link-button {
                 width: 200px;
                 justify-content: center;
-            }
-            
-            .examples-grid {
-                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -224,7 +163,6 @@
         <header class="header">
             <h1 class="title">Finding Needles in Images: Can Multi-modal LLMs Locate Fine Details?</h1>
             <p class="subtitle">A comprehensive evaluation of multi-modal large language models' ability to identify and locate fine-grained details in complex visual scenes</p>
-            
             <div class="links-section">
                 <a href="https://github.com/your-username/needles-in-images" class="link-button github">
                     <span>📄</span> Code on GitHub
@@ -241,95 +179,20 @@
         <section class="content-section">
             <h2 class="section-title">Abstract</h2>
             <p class="abstract">
-                Multi-modal Large Language Models (MLLMs) have shown remarkable capabilities in understanding and reasoning about visual content. However, their ability to locate and identify fine-grained details within complex images remains underexplored. This work introduces a comprehensive benchmark for evaluating MLLMs' precision in locating specific objects, text, and visual elements within images - essentially finding "needles in haystacks." We present a novel dataset containing diverse images with varying levels of complexity and detail density, along with corresponding location-based queries. Our evaluation reveals significant variations in performance across different model architectures and highlights the challenges that current MLLMs face when dealing with fine-grained visual understanding tasks. The findings provide insights into the current limitations of multi-modal models and suggest directions for future research in precise visual localization.
+                While Multi-modal Large Language Models (MLLMs) have shown impressive capabilities in document understanding tasks, their ability to locate and reason about fine-grained details within complex documents remains understudied. Consider searching a restaurant menu for a specific nutritional detail or locating a particular warranty clause in a manual – tasks that require precise attention to minute details within a larger context, akin to Finding Needles in Images (NiM). To address this gap, we introduce NiM-Benchmark, a carefully curated benchmark spanning diverse real-world documents including newspapers, menus, and lecture images, specifically designed to evaluate MLLMs’ capability in these intricate tasks. Building on this, we further propose Spot-IT, a simple yet effective approach that enhances MLLMs capability through intelligent patch selection and Gaussian attention, motivated from how humans zoom and focus when searching documents. Our extensive experiments reveal both the capabilities and limitations of current MLLMs in handling fine-grained document understanding tasks, while demonstrating the effectiveness of our approach. Spot-IT achieves significant improvements over baseline methods, particularly in scenarios requiring precise detail extraction from complex layouts.
             </p>
-        </section>
-
-        <section class="methodology">
-            <h2 class="section-title">Methodology</h2>
-            <div class="methodology-grid">
-                <div class="methodology-card">
-                    <div class="methodology-icon">🎯</div>
-                    <h3>Precision Localization</h3>
-                    <p>Evaluate exact coordinate prediction for objects and text elements</p>
-                </div>
-                <div class="methodology-card">
-                    <div class="methodology-icon">🔍</div>
-                    <h3>Multi-Scale Analysis</h3>
-                    <p>Test performance across different image resolutions and detail levels</p>
-                </div>
-                <div class="methodology-card">
-                    <div class="methodology-icon">📊</div>
-                    <h3>Comprehensive Metrics</h3>
-                    <p>Novel evaluation metrics for spatial accuracy and detail recognition</p>
-                </div>
-                <div class="methodology-card">
-                    <div class="methodology-icon">🧪</div>
-                    <h3>Model Comparison</h3>
-                    <p>Systematic evaluation across multiple MLLM architectures</p>
-                </div>
-            </div>
         </section>
 
         <section class="content-section">
-            <h2 class="section-title">Dataset Examples</h2>
-            <p style="text-align: center; color: #666; margin-bottom: 30px;">
-                Explore sample images from our benchmark dataset showcasing various levels of complexity and detail density
-            </p>
-            
-            <div class="examples-grid">
-                <div class="example-card">
-                    <div class="example-image">
-                        <span>🏙️ Urban Scene Example</span>
-                    </div>
-                    <div class="example-description">
-                        <strong>Complex Urban Environment:</strong> Dense cityscape with multiple layers of text, signs, and objects. Tasks include locating specific street signs, building numbers, and small details like traffic lights or pedestrian crossing signals.
-                    </div>
+            <h2 class="section-title">Visual Example: Zoomed Detail</h2>
+            <div class="zoom-view">
+                <div>
+                    <img src="3e4ffee2-398d-464a-a0e6-771c00a8bece.png" alt="Full Document">
+                    <p style="text-align: center; margin-top: 10px; color: #666;">Full Document Image</p>
                 </div>
-                
-                <div class="example-card">
-                    <div class="example-image">
-                        <span>📄 Document Analysis</span>
-                    </div>
-                    <div class="example-description">
-                        <strong>Document Needle Finding:</strong> Complex documents with multiple text elements, tables, and figures. Challenges include identifying specific paragraphs, locating particular data points in tables, and finding embedded text within images.
-                    </div>
-                </div>
-                
-                <div class="example-card">
-                    <div class="example-image">
-                        <span>🛒 Retail Environment</span>
-                    </div>
-                    <div class="example-description">
-                        <strong>Product Localization:</strong> Crowded retail spaces with numerous products and price tags. Tasks involve finding specific items, reading small price labels, and identifying product details among visual clutter.
-                    </div>
-                </div>
-                
-                <div class="example-card">
-                    <div class="example-image">
-                        <span>🎨 Artistic Composition</span>
-                    </div>
-                    <div class="example-description">
-                        <strong>Fine Art Details:</strong> High-resolution artwork and photographs with intricate details. Challenges include locating specific artistic elements, identifying subtle color variations, and finding hidden details within complex compositions.
-                    </div>
-                </div>
-                
-                <div class="example-card">
-                    <div class="example-image">
-                        <span>🔬 Scientific Imagery</span>
-                    </div>
-                    <div class="example-description">
-                        <strong>Technical Visualization:</strong> Scientific diagrams, medical images, and technical schematics. Tasks involve locating specific measurements, identifying particular components, and finding labeled elements in complex technical drawings.
-                    </div>
-                </div>
-                
-                <div class="example-card">
-                    <div class="example-image">
-                        <span>📱 Interface Navigation</span>
-                    </div>
-                    <div class="example-description">
-                        <strong>UI Element Detection:</strong> Complex user interfaces with multiple buttons, menus, and text elements. Challenges include finding specific UI components, locating particular menu items, and identifying interactive elements.
-                    </div>
+                <div>
+                    <img src="3e4ffee2-398d-464a-a0e6-771c00a8bece.png" alt="Zoomed Detail" class="zoomed">
+                    <p style="text-align: center; margin-top: 10px; color: #666;">Zoomed-In Region</p>
                 </div>
             </div>
         </section>
