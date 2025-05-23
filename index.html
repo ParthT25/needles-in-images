@@ -1,205 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Finding Needles in Images: Can Multi-modal LLMs Locate Fine Details?</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Finding Needles in Images</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', system-ui, sans-serif;
+      background-color: #f8f9fa;
+      color: #222;
+      line-height: 1.7;
+    }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-        }
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
 
-        .header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            margin-bottom: 30px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 600;
+      color: #111;
+    }
 
-        .title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 20px;
-        }
+    .header p {
+      font-size: 1rem;
+      color: #555;
+      margin-top: 10px;
+    }
 
-        .subtitle {
-            font-size: 1.2rem;
-            color: #666;
-            margin-bottom: 30px;
-        }
+    .section {
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 30px;
+      margin-bottom: 40px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+    }
 
-        .links-section {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-            margin-bottom: 40px;
-        }
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 500;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 10px;
+    }
 
-        .link-button {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            text-decoration: none;
-            padding: 15px 25px;
-            border-radius: 50px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
+    .abstract {
+      font-size: 1rem;
+      color: #333;
+      text-align: justify;
+    }
 
-        .link-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-        }
+    .image-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      align-items: center;
+    }
 
-        .link-button.github {
-            background: linear-gradient(135deg, #24292e, #586069);
-        }
+    .image-row img {
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      max-width: 100%;
+    }
 
-        .link-button.huggingface {
-            background: linear-gradient(135deg, #ff6b6b, #ffa500);
-        }
+    .image-label {
+      text-align: center;
+      color: #666;
+      font-size: 0.9rem;
+      margin-top: 8px;
+    }
 
-        .link-button.arxiv {
-            background: linear-gradient(135deg, #b91c1c, #dc2626);
-        }
+    .footer {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #888;
+      margin-top: 60px;
+      padding: 20px;
+    }
 
-        .content-section {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            margin-bottom: 30px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-        }
-
-        .section-title {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #333;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .abstract {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #555;
-            text-align: justify;
-            margin-bottom: 30px;
-        }
-
-        .zoom-view {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .zoom-view img {
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-            max-width: 100%;
-        }
-
-        .zoom-view .zoomed {
-            clip-path: inset(30% 30% 30% 30%);
-            max-width: 250px;
-        }
-
-        .footer {
-            text-align: center;
-            color: rgba(255, 255, 255, 0.8);
-            padding: 20px;
-            font-size: 0.9rem;
-        }
-
-        @media (max-width: 768px) {
-            .title {
-                font-size: 2rem;
-            }
-
-            .links-section {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .link-button {
-                width: 200px;
-                justify-content: center;
-            }
-        }
-    </style>
+    @media (max-width: 768px) {
+      .image-row {
+        flex-direction: column;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <header class="header">
-            <h1 class="title">Finding Needles in Images: Can Multi-modal LLMs Locate Fine Details?</h1>
-            <p class="subtitle">A comprehensive evaluation of multi-modal large language models' ability to identify and locate fine-grained details in complex visual scenes</p>
-            <div class="links-section">
-                <a href="https://github.com/your-username/needles-in-images" class="link-button github">
-                    <span>📄</span> Code on GitHub
-                </a>
-                <a href="https://huggingface.co/datasets/your-username/needles-dataset" class="link-button huggingface">
-                    <span>🤗</span> Dataset on HuggingFace
-                </a>
-                <a href="https://arxiv.org/abs/your-paper-id" class="link-button arxiv">
-                    <span>📚</span> Paper on arXiv
-                </a>
-            </div>
-        </header>
+  <div class="container">
+    <header class="header">
+      <h1>Finding Needles in Images: Can Multi-modal LLMs Locate Fine Details?</h1>
+      <p>A professional benchmark for fine-grained visual document understanding</p>
+    </header>
 
-        <section class="content-section">
-            <h2 class="section-title">Abstract</h2>
-            <p class="abstract">
-                While Multi-modal Large Language Models (MLLMs) have shown impressive capabilities in document understanding tasks, their ability to locate and reason about fine-grained details within complex documents remains understudied. Consider searching a restaurant menu for a specific nutritional detail or locating a particular warranty clause in a manual – tasks that require precise attention to minute details within a larger context, akin to Finding Needles in Images (NiM). To address this gap, we introduce NiM-Benchmark, a carefully curated benchmark spanning diverse real-world documents including newspapers, menus, and lecture images, specifically designed to evaluate MLLMs’ capability in these intricate tasks. Building on this, we further propose Spot-IT, a simple yet effective approach that enhances MLLMs capability through intelligent patch selection and Gaussian attention, motivated from how humans zoom and focus when searching documents. Our extensive experiments reveal both the capabilities and limitations of current MLLMs in handling fine-grained document understanding tasks, while demonstrating the effectiveness of our approach. Spot-IT achieves significant improvements over baseline methods, particularly in scenarios requiring precise detail extraction from complex layouts.
-            </p>
-        </section>
+    <section class="section">
+      <div class="section-title">Abstract</div>
+      <p class="abstract">
+        While Multi-modal Large Language Models (MLLMs) have shown impressive capabilities in document understanding tasks, their ability to locate and reason about fine-grained details within complex documents remains understudied. Consider searching a restaurant menu for a specific nutritional detail or locating a particular warranty clause in a manual – tasks that require precise attention to minute details within a larger context, akin to Finding Needles in Images (NiM). To address this gap, we introduce NiM-Benchmark, a carefully curated benchmark spanning diverse real-world documents including newspapers, menus, and lecture images, specifically designed to evaluate MLLMs’ capability in these intricate tasks. Building on this, we further propose Spot-IT, a simple yet effective approach that enhances MLLMs capability through intelligent patch selection and Gaussian attention, motivated from how humans zoom and focus when searching documents. Our extensive experiments reveal both the capabilities and limitations of current MLLMs in handling fine-grained document understanding tasks, while demonstrating the effectiveness of our approach. Spot-IT achieves significant improvements over baseline methods, particularly in scenarios requiring precise detail extraction from complex layouts.
+      </p>
+    </section>
 
-        <section class="content-section">
-            <h2 class="section-title">Visual Example: Zoomed Detail</h2>
-            <div class="zoom-view">
-                <div>
-                    <img src="3e4ffee2-398d-464a-a0e6-771c00a8bece.png" alt="Full Document">
-                    <p style="text-align: center; margin-top: 10px; color: #666;">Full Document Image</p>
-                </div>
-                <div>
-                    <img src="3e4ffee2-398d-464a-a0e6-771c00a8bece.png" alt="Zoomed Detail" class="zoomed">
-                    <p style="text-align: center; margin-top: 10px; color: #666;">Zoomed-In Region</p>
-                </div>
-            </div>
-        </section>
+    <section class="section">
+      <div class="section-title">Visual Example</div>
+      <div class="image-row">
+        <div>
+          <img src="3e4ffee2-398d-464a-a0e6-771c00a8bece.png" alt="Full Image" style="max-width: 400px;">
+          <div class="image-label">Full Document Image</div>
+        </div>
+        <div>
+          <img src="3e4ffee2-398d-464a-a0e6-771c00a8bece.png" alt="Zoomed-In Detail" style="max-width: 250px; clip-path: inset(30% 30% 30% 30%);">
+          <div class="image-label">Zoomed-In Region</div>
+        </div>
+      </div>
+    </section>
 
-        <footer class="footer">
-            <p>© 2024 Research Project | Finding Needles in Images | Built with ❤️ for the ML community</p>
-        </footer>
+    <div class="footer">
+      © 2024 Research Project | Finding Needles in Images
     </div>
+  </div>
 </body>
 </html>
